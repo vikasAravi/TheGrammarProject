@@ -1,0 +1,35 @@
+{% load bootstrap3 %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<style>
+    body{
+        /* background-color:chocolate;  */
+        text-align:center;
+        margin-top:120px;
+        margin-left:40%;
+        margin-right:40%;
+        color:black;
+        background-image:url("https://www.wraltechwire.com/wp-content/uploads/2017/11/NewsletterSignup-Background.jpg");
+
+    }
+    #a{
+        background-color:black;
+        padding:15px;
+        
+    }
+</style>
+<body>
+    <form action = '.' method = "post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type = "submit" value = "Submit">
+
+    </form>
+    {% if check %}
+        <p>Invalid Details</p>
+        <p>{{ description }}</p>
+    {% endif %}
+    {% if not total %} 
+        <p id = 'a'><a href = "application/createaccount/" >Create New Account</a> </p>
+    {% endif %}
+    
+</body>

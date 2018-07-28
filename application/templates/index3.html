@@ -1,0 +1,29 @@
+{% load bootstrap3 %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href='https://fonts.googleapis.com/css?family=Almendra SC' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Baloo Tamma' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Bubblegum Sans' rel='stylesheet'>
+<style>
+    body{
+        text-align : center;
+        margin-top: 70px;
+        padding: 20px;
+    }
+    p{
+        font-family: Bubblegum Sans;
+        color: blue;
+
+    }
+    a{
+        color: black;
+        padding: 10px;
+        font-family: Ballo Tamma;
+    }
+      
+</style>
+<body>
+      {% for object in data %}
+          <h3><p>{{ object }}</p></h3>
+          <a href = "/application/objects/{{object.id}}/"><input type = 'submit' value = "Attempt Now"></a>
+{% endfor %}
+</body>

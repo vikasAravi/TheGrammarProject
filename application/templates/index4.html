@@ -1,0 +1,140 @@
+<link href='https://fonts.googleapis.com/css?family=Almendra SC' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Baloo Tamma' rel='stylesheet'>
+<link href='https://fonts.googleapis.com/css?family=Bubblegum Sans' rel='stylesheet'>
+<html>
+        <h1>{{object}}</h1>
+        <head>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <style>
+                body{
+                    background-color: lightgray;
+                }
+                h1{
+                    margin-top: 50px;
+                    text-align: center;
+                    color:brown;
+                    font-family: Bubblegum Sans;
+                }
+                #text{
+                    margin-left: 150px;
+                    margin-right: 40px;
+                    padding-top: 20px;
+                }
+                input{
+                    margin-top: 15px;
+                    margin-left: 600px;
+                    padding: 10px 20px 15px 20px;
+                }
+                div{
+                    text-align: right;
+                    margin-right: 50px;
+                }
+
+                #id_answer_text{
+                      width: 100%;
+                    
+                }
+            </style>
+        </head>
+        <body>
+            
+            <div><h3><span id="timer"></span></h3></div>
+            <div><h4><span id="result"></span></h4></div>
+            <tag autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+            <body oncopy="return false" oncut="return false" onpaste="return false">
+
+            <form method = "post">
+                {% csrf_token %}
+                {{ form.as_table }}
+               <input id="sub" type = "submit">
+            </form>
+            <div><h4><span id="err"></span></h4></div>
+            <script>
+                {% if check == 'no' %}
+                  document.getElementById('timer').innerHTML = 00 + ":" + 10;
+                  startTimer();
+                  function startTimer() {
+                    var presentTime = document.getElementById('timer').innerHTML;
+                    var timeArray = presentTime.split(/[:]+/);
+                    var m = timeArray[0];
+                    var s = checkSecond((timeArray[1] - 1));
+                    if(s==59){m=m-1}
+                    if(m < 0){
+                        document.getElementById('id_answer_text').disabled = true;
+                        err.innerHTML = (
+                         "<br>Error Count:" + error_count
+                    );
+                
+                    }
+                    document.getElementById('timer').innerHTML =
+                      m + ":" + s;
+                    setTimeout(startTimer, 1000);
+                  }
+                {% endif %}
+    
+                  function checkSecond(sec) {
+                    if (sec < 10 && sec >= 0) {sec = "0" + sec}; // add zero in front of numbers < 10
+                    if (sec < 0) {sec = "59"};
+                    return sec;
+                  }
+    
+                  function wordCount( val ){
+                    var wom = val.match(/\S+/g);
+                    return {
+                        charactersNoSpaces : val.replace(/\s+/g, '').length,
+                        characters         : val.length,
+                        words              : wom ? wom.length : 0,
+                        lines              : val.split(/\r*\n/).length
+                    };
+                }
+                
+                
+                  var textarea = document.getElementById("id_answer_text");
+                  var result   = document.getElementById("result");
+                  textarea.addEventListener("input", function(){
+                    var v = wordCount( this.value );
+                    result.innerHTML = (
+                        "<br>Characters (no spaces):  "+ v.charactersNoSpaces +
+                        "<br>Characters (and spaces): "+ v.characters +
+                        "<br>Words: "+ v.words +
+                        "<br>Lines: "+ v.lines
+                    );
+                  }, false);
+                  
+
+            
+                  var errors = document.getElementById("sub")
+                  {% if check == 'yes' %}
+        
+                    var error_count = parseInt("{{ user_length }}");
+
+                    
+                    var i;
+                    if((textarea.value.charCodeAt(0) >= 97 && textarea.value.charCodeAt(0) <= 127) || (textarea.value.charAt(0) >= 0 && textarea.value.charAt(0) <= 9))  {
+                        error_count = error_count + 1
+                    }
+                    for(i = 0; i < (textarea.value.length) -1; i++){
+                        if( (textarea.value.charAt(i) == '.' && textarea.value.charAt(i+1) != ' ') || (textarea.value.charAt(i) == ',' && textarea.value.charAt(i+1) != ' ') || (textarea.value.charAt(i)== '.' && textarea.value.charAt(i+1) == ' ') && (textarea.value.charCodeAt(i+1) >= 97 && textarea.value.charCodeAt(i+1) <= 127)){
+                            error_count = error_count + 1;
+                        }
+                        if( (textarea.value.charAt(i)== '.' && textarea.value.charAt(i+1) != ' ') && (textarea.value.charCodeAt(i+1) >= 97 && textarea.value.charCodeAt(i+1) <= 127)){
+                            error_count  = error_count + 1;
+                        }
+                    }
+                    err.innerHTML = (
+                         "<br>Error Count:" + error_count
+                    );
+                
+                {% endif %}
+    
+
+               {% if check == 'yes' %}
+                     document.getElementById("id_answer_text").disabled = true;
+                     document.getElementById("sub").disabled = true;
+               {% endif %}
+                   
+            </script>
+        </body>
+    </html>
+    
+    
